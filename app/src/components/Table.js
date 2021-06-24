@@ -3,17 +3,19 @@ import axios from "axios"
 
 class Table extends Component {
     state = {
-        userInfo: []
+        userInfo: [],
+        filteredUserInfo: [],
+        nameFilter: ""
     }
     componentDidMount() {
         this.getUserInfo()
     }
     getUserInfo() {
-        axios.get('https://randomuser.me/api/')
-            .then( (response) => {
+        axios.get('https://randomuser.me/api/?results=30')
+            .then((response) => {
                 // handle success
                 console.log(response.data.results);
-                this.setState({ userInfo:response.data.results })
+                this.setState({ userInfo: response.data.results, filteredUserInfo: response.data.results })
             })
             .catch(function (error) {
                 // handle error
@@ -23,9 +25,24 @@ class Table extends Component {
                 // always executed
             });
     }
+
+    handleInputChange = (event) => {
+        console.log(event.target.value)
+       
+       console.log(this.state.userInfo)
+        const filterThis = this.state.filteredUserInfo.filter((employee, i) => {
+            return (employee.name.first.toUpperCase().includes(event.target.value.toUpperCase()))
+        })
+
+        this.setState({ nameFilter: event.target.value, filteredUserInfo: filterThis })
+
+    }
     render() {
         return (
+
             <div className="container">
+                {this.state.nameFilter}
+                <input type="text" id="search" name="search" onChange={this.handleInputChange} />
                 <table className="table">
                     <thead>
                         <tr>
@@ -38,9 +55,13 @@ class Table extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                    { this.state.userInfo.map((employee, i) => {
-  return(<td>{employee.name.first}</td>)
-})}
+                        {this.state.filteredUserInfo.map((employee, i) => {
+                            return (<tr><td><img src={employee.picture.thumbnail}></img></td><td>{`${employee.name.first} ${employee.name.last}`}</td><td>{employee.gender}</td><td>{employee.email}</td><td>{employee.phone}</td></tr>
+                            )
+
+                        })}
+
+
                     </tbody>
                 </table>
             </div>
