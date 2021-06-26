@@ -20,7 +20,7 @@
     "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
-  "homepage": "http://philipperkins2020.github.io/Employee-Directory",
+  "homepage": "http://philipperkins2020.github.io/employee-directory",
 
   "eslintConfig": {
     "extends": [
